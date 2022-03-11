@@ -1,0 +1,45 @@
+   NIX 
+    //Scroll
+    public void scroll(String direction, int velocity)
+    {
+    	JavascriptExecutor js = (JavascriptExecutor) driver;
+    	Map<String, Object> params = new HashMap<>();
+    	params.put("direction", direction);
+    	params.put("velocity", velocity);
+    	js.executeScript("mobile: scroll", params);
+    }
+   
+    public void scrollTillElementVisible(String xpath,int tries,String direction, int velocity)
+    {
+    	boolean found=false;
+    	for(int i=0;i<tries;i++)
+    	{
+        	try
+        	{
+        		IOSElement element=driver.findElement(By.xpath(xpath));
+        		if(element.getAttribute("visible").compareToIgnoreCase("true")==0)
+        		{
+        			System.out.print("Element is Found");
+        			found=true;
+            		break;	
+        		}
+        	}
+        	catch(NoSuchElementException nsee)
+        	{
+        		HashMap<String, Object> scrollObject = new HashMap<String, Object>();
+        		scrollObject.put("direction", direction);
+        		scrollObject.put("velocity", velocity);
+        		driver.executeScript("mobile:scroll", scrollObject);
+        		continue;
+        	}
+        	catch(Exception e)
+        	{
+        		break;
+        	}
+    	}
+    	if(!found)
+    	{
+        	System.out.print("Element is not Found");
+    	}
+    	
+    }
